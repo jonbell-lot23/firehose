@@ -1,0 +1,34 @@
+<?php
+/*******
+ *Check for errors on non production site - Please COMMENT OUT if live (//)
+********/
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
+?>
+
+<!doctype html>
+<head>
+<!-- <link rel="stylesheet" href="css/index.css"> -->
+<title>Combined RSS</title>
+</head>
+<body>
+
+<?php
+include "class/wow_rss.php";
+
+//Above feeds Combined in array for combined multiple feed option
+$urls = [
+  "https://jonb.tumblr.com/rss",
+  "https://medium.com/feed/@jonbell",
+  "https://a-blog-about-jon-bell.ghost.io/rss/",
+];
+
+$date_format = "j F, Y";
+
+//Do we want our newest posts displayed first
+$sort_feed = ["sort_order" => "new_first"];
+
+$combine = new WowMultiRss($urls, "80", "", true);
+echo $combine->displayRss();
+?>
+</body>

@@ -1,0 +1,27 @@
+.wow_feed {
+	max-width: 50%;
+	font-size: 1em;
+	font-family: sans-serif;
+}
+
+.wow_feed h2 a {
+	color: #333;
+	text-decoration: none;
+	font-size: 1.8em;
+}
+
+.wow_feed h2 a:hover {
+	color: #636363;
+}
+
+.wow_feed .cat,
+.wow_feed .date {
+	display: inline-block;
+	margin: 1em 0;
+	padding: 9px;
+	border: solid 1px #bbb7b7;
+	border-radius: 7px;
+	background-color: #0288D1;
+	color: #ffff;
+	text-transform: capitalize;
+}
