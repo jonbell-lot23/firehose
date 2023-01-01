@@ -19,16 +19,16 @@ ini_set("display_errors", 1);
 
 <a href="http://firehose.lot43.com/feed.php">Direct RSS feed: http://firehose.lot43.com/feed.php</a>
 
-
-
 <?php
 include "class/wow_rss.php";
 
 //Above feeds Combined in array for combined multiple feed option
 $urls = [
-  "https://jonb.tumblr.com/rss",
+  /*"https://jonb.tumblr.com/rss",
   "https://medium.com/feed/@jonbell",
   "https://a-blog-about-jon-bell.ghost.io/fullrss/",
+  */
+  "https://medium.com/feed/@jonbell",
 ];
 
 /*
@@ -48,5 +48,11 @@ $sort_feed = ["sort_order" => "new_first"];
 
 $combine = new WowMultiRss($urls, "80", "", true);
 echo $combine->displayRss();
+
+// $testurl = "https://feeds.simplecast.com/54nAGcIl";
+// $date_format = "j F, Y";
+
+$feed = new WowSingleRss($testurl, 45, $date_format, true);
+echo $feed->displayRss();
 ?>
 </body>

@@ -81,14 +81,23 @@ class WowSingleRss
     $curl = curl_init($this->urls);
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($curl, CURLOPT_VERBOSE, true);
+    /*Minor change to allow for https */
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
     $rss = curl_exec($curl);
+    // $rss = simplexml_load_string($rss, "SimpleXMLElement", LIBXML_NOCDATA);
+    $rss = str_replace("<content:encoded>", "<contentEncoded>", $rss);
+    $rss = str_replace("</content:encoded>", "</contentEncoded>", $rss);
+    $rss = simplexml_load_string($rss);
 
     curl_close($curl);
-
-    $rss = simplexml_load_string($rss, "SimpleXMLElement", LIBXML_NOCDATA);
-
     $array = json_decode(json_encode($rss), true);
+
+    /*The output which tests if it works*/
+    foreach ($rss->channel->item as $item) {
+      echo $item->contentEncoded;
+    }
 
     return $array;
   }
@@ -138,6 +147,7 @@ class WowSingleRss
       $url = $values["link"];
       $title = $values["title"];
       $desc = $values["description"];
+      $contentEncoded = $values["contentEncoded"];
 
       /*
       echo "<pre>";
@@ -163,8 +173,7 @@ class WowSingleRss
       }
 
       if (empty($desc)) {
-        $desc =
-          "This content source is having trouble loading things inline, but the link should work.";
+        $desc = $contentEncoded;
       }
 
       $feed .= "<div class='desc'>{$desc}</div>";
@@ -221,15 +230,13 @@ class WowSingleRss
       $url = $values["link"];
       $title = $values["title"];
       $desc = $values["description"];
-      // $content = $values["content"];
-      // $content = $feed->channel->item->children('content', true)->encoded;
+      $contentEncoded = $values["contentEncoded"];
 
       $date = $values["pubDate"];
       $date = date("r", $date); //Convert to proper date
 
       if (empty($desc)) {
-        $desc =
-          "(I'm having trouble with this content source, so I can't show things inline. The link should work, though.)";
+        $desc = $contentEncoded;
       }
 
       if ($title) {
@@ -300,17 +307,8 @@ class WowMultiRss extends WowSingleRss
    */
   protected function getFeeds()
   {
-    // cURL multi-handle
     $mh = curl_multi_init();
-
-    // This will hold cURLS requests for each file
     $requests = [];
-
-    /*
-    echo "<div style='background-color: powderblue'>";
-    echo $url;
-    echo "</div>";
-    */
 
     foreach ($this->urls as $key => $url) {
       // Add initialized cURL object to array
@@ -337,8 +335,25 @@ class WowMultiRss extends WowSingleRss
     curl_multi_close($mh);
 
     foreach ($returned as $key => $value) {
+      /*
+      echo "<pre>";
+      $value = str_replace("<content:encoded>", "<contentEncoded>", $value);
+      $value = str_replace("</content:encoded>", "</contentEncoded>", $value);
+      print_r($value);
+      echo "</pre>";
+      */
+
+      $search = "content:encoded";
+      $replace = "contentEncoded";
+
+      $newValue = str_replace($search, $replace, $value);
+
+      // print_r($newValue);
+
+      // $array = array_replace_value($array, "Trump", "Fuckface");
+
       $array[$key] = simplexml_load_string(
-        $value,
+        $newValue,
         "SimpleXMLElement",
         LIBXML_NOCDATA
       );

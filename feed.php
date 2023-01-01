@@ -10,8 +10,6 @@ echo "<?xml version='1.0' encoding='UTF-8'?>
 
 include "class/wow_rss.php";
 
-// $rand = rand(1, 100);
-
 //Above feeds Combined in array for combined multiple feed option
 $urls = [
   "https://jonb.tumblr.com/rss?boop=ack",

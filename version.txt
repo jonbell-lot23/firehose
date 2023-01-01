@@ -1,0 +1,9 @@
+**********************Version History
+
+1.2 - 21st December 2019:
+Added Method checkFeed() to parent and child class.
+Removed redundant code
+
+
+1.1 - 3rd February: Minor bugfixes and tidied code
+1.0 - 19th January 2018: Initial Release
